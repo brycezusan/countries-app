@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
@@ -6,8 +6,9 @@ import Layout from './layouts/Layout'
 import Index from './pages/Index'
 import PageError from './pages/PageError'
 import CountriesProvider from './context/CountriesProvider'
-import PageCountry ,{loader as detailsCountryLoader } from './pages/PageCountry'
+import {loader as detailsCountryLoader } from './pages/PageCountry'
 
+const PageCountry = lazy(()=>import("./pages/PageCountry"))
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
       },
       {
         path:"countries/:nameCountry",
-        element:<PageCountry />,
+        element:<Suspense fallback={<p>Cargando....</p>}><PageCountry /></Suspense>,
         errorElement:<PageError />,
         loader:detailsCountryLoader
       }
